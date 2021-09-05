@@ -2,7 +2,10 @@ import React from 'react';
 import styled from "styled-components";
 import tw from "twin.macro"
 import { Navbar } from '../../components/navbar';
-import { TopSection } from './topSection';
+import { AboutMe } from '../AboutMe/aboutMe';
+import { MainSection } from './MainSection';
+import { BrowserRouter as Router, Switch, Route} from 'react-router-dom'
+import { TeamListing } from '../TeamListing/TeamListing';
 
 const PageContainer = styled.div`
     ${tw`
@@ -16,10 +19,17 @@ const PageContainer = styled.div`
 `;
 
 export function HomePage() {
+    
     return (
         <PageContainer>
-            <Navbar/>
-            <TopSection/>
+            <Router>
+                <Navbar/>
+                <Switch>
+                    <Route path="/" exact component={MainSection}/>
+                    <Route path="/about-me" exact component={AboutMe}/>
+                    <Route path="/team/list" exact component={TeamListing}/>
+                </Switch>
+            </Router>
         </PageContainer>
     );
 }

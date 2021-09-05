@@ -5,6 +5,7 @@ import PikachuImg from '../../../assets/images/pikachu.png';
 import BlobImg from '../../../assets/images/blob.svg';
 import { SCREENS } from '../../components/responsive';
 import { Button } from '../../components/button';
+import { Link } from 'react-router-dom';
 
 const TopSectionContainer = styled.div`
     min-height:400px;
@@ -148,7 +149,7 @@ const ButtonContainer =  styled.div`
     `};
 `;
 
-export function TopSection() {
+export function MainSection() {
     return (
         <TopSectionContainer>
             <LeftContainer>
@@ -160,7 +161,9 @@ export function TopSection() {
                 </Description>
                 <ButtonContainer>
                     <Button text="Create Team"/>
-                    <Button theme="filled" text="Team Listing"/>
+                    <Link to="/team/list">
+                        <Button theme="filled" text="Team Listing"/>
+                    </Link>
                 </ButtonContainer>
             </LeftContainer>
             <RightContainer>
