@@ -1,8 +1,9 @@
-import React from 'react'
+import {useEffect} from 'react'
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import { ITeam } from '../../../typings/team';
 import { Team } from '../../components/team';
+import teamService from '../../services/teamService';
 
 const TeamListingContainer = styled.div`
     ${tw`
@@ -42,10 +43,24 @@ const TeamContainer = styled.div`
 
 export function TeamListing() {
 
+    const fetchTeams = async () => {
+        const teams = await teamService.getTeams().catch((err) => {
+            console.log("Errors: ", err)
+        });
+
+        console.log("Teams: ", teams)
+    }
+
+    useEffect(() => {
+        fetchTeams();
+    }, []);
+
     const testTeam: ITeam = {
         name: 'my team',
         thumbnailSrc: 'https://pbs.twimg.com/profile_images/559036316185133057/uwV6znsv.png'
     }
+
+
 
     return (
         <TeamListingContainer>

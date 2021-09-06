@@ -5,6 +5,8 @@ import { SCREENS } from '../../components/responsive';
 import MeImg from '../../../assets/images/me.jpg'
 
 const AboutMeContainer = styled.div`
+    position: absolute;
+    bottom: 0;
     ${tw`
         w-full
         flex
@@ -18,6 +20,7 @@ const AboutMeContainer = styled.div`
         md:pl-0
         md:pr-0
         bg-white
+        mb-0
     `};
 `;
 
