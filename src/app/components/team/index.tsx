@@ -90,19 +90,11 @@ export function Team(props: ITeamProps) {
     const [current, setCurrent] = useState(0);
     const isMobile = useMediaQuery({ maxWidth: SCREENS.sm });
     const TestPokemon1 : IPokemon = {
-        name: 'imposter',
         thumbnailSrc: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',
-        base_experience: 64,
-        abilities: ['chlorophyll'],
-        types: ['grass', 'poison']
     }
 
     const TestPokemon2 : IPokemon = {
-        name: 'overgrow',
         thumbnailSrc: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png',
-        base_experience: 64,
-        abilities: ['chlorophyll'],
-        types: ['grass', 'poison']
     }
     const pokemons = [
         <Pokemon  {...TestPokemon1}/>,

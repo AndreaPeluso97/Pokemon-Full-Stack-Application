@@ -160,7 +160,9 @@ export function MainSection() {
                 A new pokemon tournament is coming soon and you must create a strong team to try to excel at the competition!
                 </Description>
                 <ButtonContainer>
-                    <Button text="Create Team"/>
+                    <Link to="/team/create">
+                        <Button text="Create Team"/>
+                    </Link>
                     <Link to="/team/list">
                         <Button theme="filled" text="Team Listing"/>
                     </Link>

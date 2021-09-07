@@ -9,7 +9,8 @@ class TeamService {
             throw err;
         });
 
-        if (response && response.data) return response.data as GetTeams_teams[];
+        if (response && response.data && response.data.teams) 
+            return response.data.teams as GetTeams_teams[];
 
         return [];
     }

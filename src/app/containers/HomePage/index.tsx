@@ -6,6 +6,7 @@ import { AboutMe } from '../AboutMe/aboutMe';
 import { MainSection } from './MainSection';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 import { TeamListing } from '../TeamListing/TeamListing';
+import { CreateTeam }  from '../CreateTeam/CreateTeam';
 
 const PageContainer = styled.div`
     ${tw`
@@ -28,6 +29,7 @@ export function HomePage() {
                     <Route path="/" exact component={MainSection}/>
                     <Route path="/about-me" exact component={AboutMe}/>
                     <Route path="/team/list" exact component={TeamListing}/>
+                    <Route path="/team/create" exact component={CreateTeam}/>
                 </Switch>
             </Router>
         </PageContainer>

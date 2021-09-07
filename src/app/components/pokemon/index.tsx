@@ -22,13 +22,17 @@ const PokemonThumbnail = styled.div`
 `;
 
 export function Pokemon(props: IPokemonProps) {
-const { thumbnailSrc } = props;
+const { name, base_experience, abilities, types, thumbnailSrc } = props;
 
 return (
     <PokemonContainer>
         <PokemonThumbnail>
             <img src={thumbnailSrc} alt="pokemon"/>
         </PokemonThumbnail>
+        {name && (<p><b>Name:</b> {name}</p>)}
+        {base_experience && (<p><b>Base Experience:</b> {base_experience}</p>)}
+        {abilities && (<p><b>Abilities: </b>{abilities.map((el: any)=> el.ability.name).join(', ')}</p>)}
+        {types && (<p><b>Types: </b>{types.map((el: any)=> el.type.name).join(', ')}</p>)}
     </PokemonContainer>
 );
 }

@@ -1,7 +1,13 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
+import teamListingReducer from './containers/TeamListing/slice';
+import reduxLogger from 'redux-logger';
 
 export const store = configureStore({
-  reducer: {}
+  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(reduxLogger),
+  reducer: {
+    teamListing: teamListingReducer
+  },
+  devTools: true
 });
 
 export type AppDispatch = typeof store.dispatch;
