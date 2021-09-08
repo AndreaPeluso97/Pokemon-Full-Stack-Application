@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Team } from './entities/team';
+import { MongooseModule } from '@nestjs/mongoose';
 import { TeamsResolver } from './teams.resolver';
+import { TeamSchema } from './teams.schema';
 import { TeamsService } from './teams.service';
 
 @Module({
-    imports: [TypeOrmModule.forFeature([Team])],
-    providers: [TeamsService, TeamsResolver],
-    exports: [TeamsService]
+    imports: [MongooseModule.forFeature([{name: 'Teams', schema: TeamSchema}])],
+    providers: [TeamsService, TeamsResolver]
 })
 export class TeamsModule {}

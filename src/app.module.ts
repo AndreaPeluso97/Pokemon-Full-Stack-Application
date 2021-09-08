@@ -2,20 +2,19 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { DatabaseModule } from './database/database.module';
 import { GraphQLModule } from '@nestjs/graphql';
-import { ComponentsModule } from './components/components.module';
+import { MongooseModule } from '@nestjs/mongoose';
+import { TeamsModule } from './components/teams/teams.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot(), 
-    DatabaseModule, 
+    TeamsModule, 
     GraphQLModule.forRoot({
       playground: true,
       debug: true,
       autoSchemaFile: true
     }),
-    ComponentsModule,
+    MongooseModule.forRoot('mongodb://localhost/nest')
   ],
   controllers: [AppController],
   providers: [AppService],
