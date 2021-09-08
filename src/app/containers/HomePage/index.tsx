@@ -7,6 +7,7 @@ import { MainSection } from './MainSection';
 import { BrowserRouter as Router, Switch, Route} from 'react-router-dom'
 import { TeamListing } from '../TeamListing/TeamListing';
 import { CreateTeam }  from '../CreateTeam/CreateTeam';
+import { EditTeam } from '../EditTeam/EditTeam';
 
 const PageContainer = styled.div`
     ${tw`
@@ -30,6 +31,7 @@ export function HomePage() {
                     <Route path="/about-me" exact component={AboutMe}/>
                     <Route path="/team/list" exact component={TeamListing}/>
                     <Route path="/team/create" exact component={CreateTeam}/>
+                    <Route path="/team/{team-id}/edit" exact component={EditTeam}/>
                 </Switch>
             </Router>
         </PageContainer>

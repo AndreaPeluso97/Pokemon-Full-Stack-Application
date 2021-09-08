@@ -1,4 +1,5 @@
 export interface ITeam {
+    _id: string;
     name: string;
-    thumbnailSrc: string;
+    pokemons: [];
 }

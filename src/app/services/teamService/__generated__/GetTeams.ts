@@ -8,9 +8,9 @@
 // ====================================================
 
 export interface GetTeams_teams {
-  __typename: "Team";
-  id: string;
+  _id: string;
   name: string;
+  pokemon: []
 }
 
 export interface GetTeams {

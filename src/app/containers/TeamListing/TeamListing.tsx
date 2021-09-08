@@ -96,7 +96,6 @@ export function TeamListing() {
         // used to testing if loading components works
         // await wait(5000);
 
-        console.log("Teams: ", teams)
         if (teams) setTeams(teams);
         setLoading(false);
     }
@@ -115,7 +114,11 @@ export function TeamListing() {
 
     const teamsComponents = 
         (!isEmptyTeams && teams.map(
-            (team) => <Team {...team} thumbnailSrc="https://pbs.twimg.com/profile_images/559036316185133057/uwV6znsv.png"/>
+            (team) => <Team
+                        _id={team._id} 
+                        name={team.name}
+                        pokemons={team.pokemon}
+                        />
             )
         ) || [];
 

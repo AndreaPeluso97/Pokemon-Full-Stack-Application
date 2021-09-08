@@ -9,11 +9,16 @@ class TeamService {
             throw err;
         });
 
-        if (response && response.data && response.data.teams) 
-            return response.data.teams as GetTeams_teams[];
+        if (response && response.data && response.data.teams) { 
+            let arrayForSort = [...response.data.teams]
+            arrayForSort.reverse();
+            let teams = arrayForSort
+            return teams as GetTeams_teams[];
+            }
 
         return [];
     }
+
 }
 
 export default new TeamService();

@@ -6,6 +6,12 @@ import { Form, Button, } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Pokemon } from '../../components/pokemon';
 import { MoonLoader } from 'react-spinners';
+import { addTeam } from '../../services/teamService/mutations';
+import { useMutation } from '@apollo/client';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+toast.configure();
 
 const FormContainer = styled.div`
     width: 400px;
@@ -51,6 +57,7 @@ export function CreateTeamForm() {
         pokemonData: {
             name: '',
             base_experience: 0,
+            thumbnailSrc: '',
             abilities: [],
             types: [],
             sprites: {
@@ -72,6 +79,7 @@ export function CreateTeamForm() {
             pokemonData: {
                 name: '',
                 base_experience: 0,
+                thumbnailSrc: '',
                 abilities: [],
                 types: [],
                 sprites: {
@@ -95,6 +103,7 @@ export function CreateTeamForm() {
                     pokemonData: {
                         name: '',
                         base_experience: 0,
+                        thumbnailSrc: '',
                         abilities: [],
                         types: [],
                         sprites: {
@@ -108,16 +117,44 @@ export function CreateTeamForm() {
 
       const { pokemonData, isLoading } = userRequest;
 
+      const [addNewTeam, { data, loading, error }] = useMutation(addTeam);
 
     return (
         <FormContainer>
             <Formik 
             initialValues={{ Name:""}}
             onSubmit={(values, { setSubmitting }) => {
-                setTimeout(() => {
-                  alert(JSON.stringify(values, null, 2));
-                  setSubmitting(false);
-                }, 400);
+                addNewTeam({variables: {team: {
+                    name: values.Name,
+                    pokemon: [
+                      {
+                        name: pokemonData.name,
+                        base_experience: pokemonData.base_experience,
+                        thumbnailSrc: pokemonData.sprites.front_default,
+                        abilities: pokemonData.abilities.map((abilitys: any)=> ({name: abilitys.ability.name})),
+                        types: pokemonData.types.map((types: any)=> ({name: types.type.name})),
+                      }
+                    ]
+                  }
+                }
+                }).then(() => {
+                    setUserRequest({
+                        pokemonData: {
+                            name: '',
+                            base_experience: 0,
+                            thumbnailSrc: '',
+                            abilities: [],
+                            types: [],
+                            sprites: {
+                                front_default: ''
+                            },
+                        },
+                        isLoading: false
+                      });
+                      values.Name = ''
+                    setSubmitting(false);
+                    toast('You just created a new team!');
+                })
               }}
               >
             {( {values,
@@ -167,7 +204,7 @@ export function CreateTeamForm() {
                     <Form.Group className="mb-3 mt-3 text-center">
                         <Button
                             variant="success"
-                            disabled={isSubmitting}
+                            disabled={isSubmitting || !values.Name || !pokemonData.name}
                             type="submit">
                         Create
                         </Button>

@@ -7,8 +7,8 @@ import Carousel, { Dots, slidesToShowPlugin } from '@brainhubeu/react-carousel';
 import '@brainhubeu/react-carousel/lib/style.css';
 import { SCREENS } from '../responsive';
 import { useMediaQuery } from 'react-responsive';
-import { IPokemon } from '../../../typings/pokemon';
 import { Pokemon } from '../pokemon';
+import { Link } from 'react-router-dom';
 
 interface ITeamProps extends ITeam {}
 
@@ -86,9 +86,10 @@ const EditButton = styled(Button)`
 `;
 
 export function Team(props: ITeamProps) {
-    const { name, thumbnailSrc } = props;
+    const { _id , name, pokemons} = props;
     const [current, setCurrent] = useState(0);
     const isMobile = useMediaQuery({ maxWidth: SCREENS.sm });
+    /*
     const TestPokemon1 : IPokemon = {
         thumbnailSrc: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',
     }
@@ -96,15 +97,15 @@ export function Team(props: ITeamProps) {
     const TestPokemon2 : IPokemon = {
         thumbnailSrc: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png',
     }
-    const pokemons = [
-        <Pokemon  {...TestPokemon1}/>,
-        <Pokemon {...TestPokemon2}/>,
-        <Pokemon {...TestPokemon2}/>,
-        <Pokemon {...TestPokemon2}/>,
-        <Pokemon {...TestPokemon2}/>,
-        <Pokemon {...TestPokemon2}/>
-    ];
-    const totalBaseExperience = 100
+    */
+    const pokemonsComponents = 
+    (pokemons.length > 0 && pokemons.map(
+        (pokemon: any) =>  <Pokemon
+                                thumbnailSrc={pokemon.thumbnailSrc}/>
+        )
+    ) || [];
+
+    const totalBaseExperience = pokemons.map((pokemon: any) => pokemon.base_experience).reduce((a, c) => { return a + c });
     const numberOfDots = isMobile ? pokemons.length : Math.ceil(pokemons.length / 1);
 
   
@@ -112,14 +113,15 @@ export function Team(props: ITeamProps) {
     return (
         <TeamContainer>
             <TeamThumbnail>
-                <img src={thumbnailSrc} alt="team"></img>
+                <img src="https://cdn.logojoy.com/wp-content/uploads/2018/05/30161640/1329-768x591.png"
+                     alt="team"/>
             </TeamThumbnail>
             <TeamName>{name}</TeamName>
             <Separator/>
             <Carousel 
                 value={current} 
                 slides={
-                    pokemons
+                    pokemonsComponents
                 }
                 plugins={[
                     'clickToChange',
@@ -160,9 +162,11 @@ export function Team(props: ITeamProps) {
                   Total Base Experience: {totalBaseExperience}
             </BaseExperience>
             <Types>
-                Types: Grass, Poison
+                {pokemons.map((pokemon: any) => pokemon.types && (<p><b>{pokemon.name} Types: </b>{pokemon.types.map((type: any)=> type.name).join(', ')}</p>))}
             </Types>
-            <EditButton text="Edit"/>
+            <Link to={"/team/" + _id + "/edit"}>
+                <EditButton text="Edit"/>
+            </Link>
         </TeamContainer>
     );
 }
