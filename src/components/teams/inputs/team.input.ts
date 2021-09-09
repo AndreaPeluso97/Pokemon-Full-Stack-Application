@@ -1,12 +1,13 @@
 import { Field, InputType } from "@nestjs/graphql";
-import { Column, ObjectID, ObjectIdColumn } from "typeorm";
+import { Column, ObjectIdColumn, PrimaryGeneratedColumn } from "typeorm";
 import { Pokemon } from "../entities/pokemon";
 
 @InputType()
 export class TeamInput {
 
     @ObjectIdColumn()
-    _id: ObjectID;
+    @PrimaryGeneratedColumn('uuid')
+    id: string;
     
     @Column()
     @Field()

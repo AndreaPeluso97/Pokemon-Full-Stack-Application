@@ -1,12 +1,13 @@
 import { Field, ObjectType } from "@nestjs/graphql";
-import { ObjectID } from "typeorm";
+import { PrimaryGeneratedColumn } from "typeorm";
 import { PokemonType } from "./pokemon";
 
 @ObjectType()
 export class TeamType {
 
-    @Field(type => String)
-    _id: ObjectID
+    @Field()
+    @PrimaryGeneratedColumn('uuid')
+    id!: string;
     
     @Field()
     name: string;
