@@ -15,6 +15,12 @@ const PokemonThumbnail = styled.div`
     width:100%;
     height:auto;
 
+    ${tw`
+        flex
+        items-center
+        justify-center
+    `}
+
     img {
         width:100%:
         height:100%;

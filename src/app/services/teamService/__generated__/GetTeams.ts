@@ -8,7 +8,7 @@
 // ====================================================
 
 export interface GetTeams_teams {
-  _id: string;
+  id: string;
   name: string;
   pokemon: []
 }

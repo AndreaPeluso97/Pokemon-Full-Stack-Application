@@ -31,7 +31,7 @@ export function HomePage() {
                     <Route path="/about-me" exact component={AboutMe}/>
                     <Route path="/team/list" exact component={TeamListing}/>
                     <Route path="/team/create" exact component={CreateTeam}/>
-                    <Route path="/team/{team-id}/edit" exact component={EditTeam}/>
+                    <Route path="/team/:teamId/edit" exact component={EditTeam}/>
                 </Switch>
             </Router>
         </PageContainer>

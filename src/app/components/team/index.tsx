@@ -86,7 +86,7 @@ const EditButton = styled(Button)`
 `;
 
 export function Team(props: ITeamProps) {
-    const { _id , name, pokemons} = props;
+    const { id , name, pokemons} = props;
     const [current, setCurrent] = useState(0);
     const isMobile = useMediaQuery({ maxWidth: SCREENS.sm });
     /*
@@ -159,12 +159,12 @@ export function Team(props: ITeamProps) {
             <Dots value={current} onChange={setCurrent} number={numberOfDots} />
             <Separator/>
             <BaseExperience>
-                  Total Base Experience: {totalBaseExperience}
+                  <b>Total Base Experience:</b> {totalBaseExperience}
             </BaseExperience>
             <Types>
-                {pokemons.map((pokemon: any) => pokemon.types && (<p><b>{pokemon.name} Types: </b>{pokemon.types.map((type: any)=> type.name).join(', ')}</p>))}
+                <b>Types:</b> {pokemons.map((pokemon: any) => pokemon.types && (pokemon.types.map((type: any)=> type.name).join(', '))).join(', ')}
             </Types>
-            <Link to={"/team/" + _id + "/edit"}>
+            <Link to={"/team/" + id + "/edit"}>
                 <EditButton text="Edit"/>
             </Link>
         </TeamContainer>

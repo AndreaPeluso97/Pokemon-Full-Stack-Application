@@ -3,13 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { createSelector } from 'reselect';
 import styled from 'styled-components';
 import tw from 'twin.macro';
-import { ITeam } from '../../../typings/team';
 import { Team } from '../../components/team';
 import teamService from '../../services/teamService';
 import { GetTeams_teams } from '../../services/teamService/__generated__/GetTeams';
 import { makeSelectTeams } from './selectors';
 import { setTeams } from './slice';
 import MoonLoader from 'react-spinners/MoonLoader'
+import Select from 'react-select';
 
 const TeamListingContainer = styled.div`
     ${tw`
@@ -83,25 +83,78 @@ export function TeamListing() {
 
     const [isLoading, setLoading] = useState(false);
 
+    const [types, setTypes] = useState([]);
+
     const { teams } = useSelector(stateSelector);
 
     const { setTeams } = actionDispatch(useDispatch());
+    
+    function fetchTeams(_signal: any) {
+        return new Promise((resolve, reject) => {
+           const teams = teamService.getTeams().catch((err) => {
+                console.log("Errors: ", err)
+            });
 
-    const fetchTeams = async () => {
-        setLoading(true)
-        const teams = await teamService.getTeams().catch((err) => {
+            resolve(teams);
+        })
+      }
+
+      async function filterTeams(selectedOption: any) {
+        setLoading(true);
+        const filteredTeams = await teamService.filterTeams(selectedOption.value).catch((err) => {
             console.log("Errors: ", err)
         });
-
-        // used to testing if loading components works
-        // await wait(5000);
-
-        if (teams) setTeams(teams);
+        if (filteredTeams) {
+            console.log(filteredTeams)
+            setTeams(filteredTeams);
+        }
         setLoading(false);
-    }
+      }
+
+      function getPokemonTypes() {
+        return new Promise((resolve, reject) => {
+            const pokeApi = {
+                apiUrl: 'https://pokeapi.co/api/v2/',
+                endpoint: 'type/'
+            }
+            const url = pokeApi.apiUrl + pokeApi.endpoint
+            fetch(url)
+                .then((data) => data.json())
+                .then((types) =>
+                  resolve(types)
+                )
+                .catch((err) => {
+                    reject(err);
+                });
+         })
+      }
 
     useEffect(() => {
-        fetchTeams();
+        const abortController = new AbortController()
+        const signal = abortController.signal;
+        getPokemonTypes()
+            .then((types: any) => {
+                if (types) {
+                    setTypes(types.results.map((type: any) => 
+                        ({
+                            value: type.name,
+                            label: type.name
+                        })
+                        ));
+                }
+            });
+        setLoading(true)
+            fetchTeams({signal: signal})
+                .then((teams: any) => {
+                    console.log(teams)
+                    if (teams) setTeams(teams);
+                    setLoading(false);
+                return true;
+                })
+            .catch(err => console.log('There was an error:' + err))            
+        return function cleanup() {
+            abortController.abort();
+        }
     }, []);
 
    //testing
@@ -115,26 +168,27 @@ export function TeamListing() {
     const teamsComponents = 
         (!isEmptyTeams && teams.map(
             (team) => <Team
-                        _id={team._id} 
+                        id={team.id} 
                         name={team.name}
                         pokemons={team.pokemon}
                         />
             )
         ) || [];
 
-    if (isEmptyTeams) 
-            return null;
-
     return (
         <TeamListingContainer>
             <Title>
-                Your Teams:
+            Your Teams:
             </Title>
             {isLoading && (
                 <LoadingContainer>
                     <MoonLoader loading size={20}/>
                 </LoadingContainer>
             )}
+            <Select 
+                onChange={filterTeams}
+                className="mt-4 col-md-8 col-offset-4"
+                options = {types} />
             {isEmptyTeams && !isLoading && <EmptyTeams>No Teams To Show!</EmptyTeams>}
             {!isEmptyTeams  && !isLoading && <TeamContainer>
                 {teamsComponents}

@@ -18,7 +18,7 @@ const BaseButton = styled.button`
         outline-none
         rounded-md
         text-white
-        text-xs
+        text-xl
         font-semibold
         border-transparent
         border-2

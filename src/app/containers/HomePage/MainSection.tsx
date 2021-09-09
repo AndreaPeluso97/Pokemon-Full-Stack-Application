@@ -8,10 +8,10 @@ import { Button } from '../../components/button';
 import { Link } from 'react-router-dom';
 
 const TopSectionContainer = styled.div`
-    min-height:400px;
     margin-top: 6em;
     ${tw`
         w-full
+        h-full
         max-w-screen-2xl
         flex
         justify-between
@@ -79,9 +79,7 @@ const BlobContainer = styled.div`
     transform: rotate(-30deg);
 
     img {
-        width: 100%;
-        height: auto;
-        max-height:max-content;
+        object-fit: cover;
     }
 
     @media (min-width: ${SCREENS.sm}) {
@@ -94,10 +92,11 @@ const BlobContainer = styled.div`
     
     @media (min-width: ${SCREENS.lg}) {
         width: 50em;
-        max-height: 30em;
+        max-height: 20em;
         right: -7em;
         top: -15em;
         transform: rotate(-30deg);
+        object-fit: cover;
     }
     
     @media (min-width: ${SCREENS.xl}) {
@@ -109,7 +108,7 @@ const BlobContainer = styled.div`
     }
 `;
 
-const StandaloneCar = styled.div`
+const StandalonePokemon = styled.div`
     width: auto;
     height: 10em;
     right: -6em;
@@ -172,9 +171,9 @@ export function MainSection() {
                 <BlobContainer>
                     <img src={BlobImg} alt="blob"></img>
                 </BlobContainer>
-                <StandaloneCar>
+                <StandalonePokemon>
                     <img src={PikachuImg} alt="pokemon"></img>
-                </StandaloneCar>
+                </StandalonePokemon>
             </RightContainer>
         </TopSectionContainer>
     );

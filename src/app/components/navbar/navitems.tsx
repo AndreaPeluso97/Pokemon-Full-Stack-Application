@@ -7,10 +7,10 @@ import { SCREENS } from '../responsive';
 import menuStyles from './menuStyles'
 import { Link } from 'react-router-dom';
 
-const ListContainer = styled.ul`
+const ListContainer = styled.ul`    
     ${tw`
         flex
-        list-none     
+        list-none  
     `};
 `;
 
@@ -49,12 +49,12 @@ export function NavItems() {
             <Menu right styles={menuStyles}>
                 <ListContainer>
                     <NavItem menu>
-                        <Link to="/">
+                        <Link to="/" style={{color: 'inherit', textDecoration: 'inherit'}}>
                             <li>Home</li>
                         </Link>
                     </NavItem>
                     <NavItem menu>
-                        <Link to="/about-me">
+                        <Link to="/about-me" style={{color: 'inherit', textDecoration: 'inherit'}}>
                             <li>About Me</li>
                         </Link>
                     </NavItem>
@@ -65,12 +65,12 @@ export function NavItems() {
     return (
         <ListContainer>
             <NavItem>
-                <Link to="/">
+                <Link to="/" style={{color: 'inherit', textDecoration: 'inherit'}}>
                     <li>Home</li>
                 </Link>
             </NavItem>
             <NavItem>
-                <Link to="/about-me">
+                <Link to="/about-me" style={{color: 'inherit', textDecoration: 'inherit'}}>
                     <li>About Me</li>
                 </Link>
             </NavItem>

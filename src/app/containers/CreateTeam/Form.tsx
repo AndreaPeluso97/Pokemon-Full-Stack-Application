@@ -1,15 +1,16 @@
 import { Formik } from 'formik';
-import React, { useState } from 'react'
+import React, { Dispatch, useState } from 'react'
 import styled from 'styled-components';
 import tw from 'twin.macro';
 import { Form, Button, } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.css';
 import { Pokemon } from '../../components/pokemon';
 import { MoonLoader } from 'react-spinners';
-import { addTeam } from '../../services/teamService/mutations';
+import { addTeam, newPokemon } from '../../services/teamService/mutations';
 import { useMutation } from '@apollo/client';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from 'react-router-dom';
 
 toast.configure();
 
@@ -51,7 +52,9 @@ const PokemonContainer = styled.div`
 
 `;
 
-export function CreateTeamForm() {
+
+
+export function CreateTeamForm(props: any) {
 
     const [userRequest, setUserRequest] = useState({
         pokemonData: {
@@ -66,6 +69,11 @@ export function CreateTeamForm() {
         },
         isLoading: false,
       });
+
+    const [created, setCreated] = useState(false);
+
+    const [teamCreatedID, setTeamCreatedID] = useState(0);
+
 
     const pokeApi = {
         apiUrl: 'https://pokeapi.co/api/v2/',
@@ -117,14 +125,51 @@ export function CreateTeamForm() {
 
       const { pokemonData, isLoading } = userRequest;
 
-      const [addNewTeam, { data, loading, error }] = useMutation(addTeam);
+      const [addNewTeam] = useMutation(addTeam, {
+        onCompleted: (response) => {
+            setTeamCreatedID(response.createTeams.id)
+        }
+    });
+
+      const [createNewPokemon] = useMutation(newPokemon);
+
 
     return (
         <FormContainer>
             <Formik 
             initialValues={{ Name:""}}
             onSubmit={(values, { setSubmitting }) => {
-                addNewTeam({variables: {team: {
+               if (props.type === "edit") {
+                createNewPokemon({variables: {
+                    id: props.teamId,
+                    pokemon: 
+                      {
+                        name: pokemonData.name,
+                        base_experience: pokemonData.base_experience,
+                        thumbnailSrc: pokemonData.sprites.front_default,
+                        abilities: pokemonData.abilities.map((abilitys: any)=> ({name: abilitys.ability.name})),
+                        types: pokemonData.types.map((types: any)=> ({name: types.type.name})),
+                      }
+                }
+                }).then(() => {
+                    setUserRequest({
+                        pokemonData: {
+                            name: '',
+                            base_experience: 0,
+                            thumbnailSrc: '',
+                            abilities: [],
+                            types: [],
+                            sprites: {
+                                front_default: ''
+                            },
+                        },
+                        isLoading: false
+                      });
+                    setSubmitting(false);
+                    toast('You just added new pokemon to the team!');
+                })
+               } else
+               { addNewTeam({variables: {team: {
                     name: values.Name,
                     pokemon: [
                       {
@@ -154,7 +199,8 @@ export function CreateTeamForm() {
                       values.Name = ''
                     setSubmitting(false);
                     toast('You just created a new team!');
-                })
+                    setCreated(true);
+                })}
               }}
               >
             {( {values,
@@ -165,6 +211,8 @@ export function CreateTeamForm() {
                 handleSubmit,
                 isSubmitting }) => (
                 <Form onSubmit={handleSubmit}>
+                   {props.type === "edit" ? 
+                    <Form.Label>Add new pokemons to the Team</Form.Label> :
                     <Form.Group
                         className="mb-3">
                         <Form.Label>Name Of The Team</Form.Label>
@@ -178,7 +226,7 @@ export function CreateTeamForm() {
                         <Form.Text className="text-muted">
                         Choose an original name :)
                         </Form.Text>
-                    </Form.Group>
+                    </Form.Group>}
                     <Form.Group className="mb-3">
                             <Button
                                 onClick={getRandomPokemon}
@@ -192,23 +240,31 @@ export function CreateTeamForm() {
                         </LoadingContainer>
                     )}
                    { pokemonData && pokemonData.sprites.front_default && !isLoading && (
-                    <PokemonContainer>
-                        <Pokemon
-                                name={pokemonData.name}
-                                base_experience={pokemonData.base_experience}
-                                abilities={pokemonData.abilities}
-                                types={pokemonData.types}
-                                thumbnailSrc={pokemonData.sprites.front_default}/>
-                    </PokemonContainer>
+                    <Form.Group className="mb-3 mt-3">
+                        <PokemonContainer>
+                            <Pokemon 
+                                    name={pokemonData.name}
+                                    base_experience={pokemonData.base_experience}
+                                    abilities={pokemonData.abilities}
+                                    types={pokemonData.types}
+                                    thumbnailSrc={pokemonData.sprites.front_default}/>
+                        </PokemonContainer>
+                    </Form.Group>
                         )}
                     <Form.Group className="mb-3 mt-3 text-center">
                         <Button
                             variant="success"
-                            disabled={isSubmitting || !values.Name || !pokemonData.name}
+                            disabled={isSubmitting || (!values.Name && props.type === "!edit") || !pokemonData.name}
                             type="submit">
-                        Create
+                        {props.type === "edit"? "Add pokemon" : "Gotta Catch 'Em All"}
                         </Button>
                     </Form.Group>
+                    {props.type !== "edit" && created && 
+                    <Form.Group className="mb-3 mt-3 text-center">
+                        <Link to={"/team/" + teamCreatedID + "/edit"}>
+                            Go To Team        
+                        </Link>
+                    </Form.Group>}
                 </Form>
             )}
             </Formik>

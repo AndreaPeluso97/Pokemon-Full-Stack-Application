@@ -31,12 +31,14 @@ const Title = styled.h2`
 
 export function EditTeam() {
 
+    const params: any = useParams();
+
     return (
         <CreateTeamContainer>
             <Title>
                 Edit Your Team
             </Title>
-            <CreateTeamForm/>
+            <CreateTeamForm type="edit" teamId={params.teamId}/>
         </CreateTeamContainer>
     );
 }
