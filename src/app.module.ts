@@ -14,7 +14,7 @@ import { TeamsModule } from './components/teams/teams.module';
       debug: true,
       autoSchemaFile: true
     }),
-    MongooseModule.forRoot('mongodb://localhost/nest')
+    MongooseModule.forRoot('mongodb://mongodb:27017/nest')
   ],
   controllers: [AppController],
   providers: [AppService],
