@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    volumes: 
+      - mongo:/data/db
+    ports: 
+      - "27017:27017"
+    networks:
+    - shared-network  
+
+  api-prod:
+    container_name: nestjs_api_prod
+    image: nestjs-api-prod:1.0.0
+    build:
+      context: back-end
+      target: production
+      dockerfile: Dockerfile
+    command: sh -c 'yarn start:prod'
+    networks:
+      - shared-network
+    ports:
+      - "9000:9000"
+    links:
+      - mongodb
+    restart: unless-stopped
+
+  app-prod:
+    container_name: react_app_prod
+    image: react-app-prod:1.0.0
+    build:
+      context: front-end
+      target: production
+      dockerfile: Dockerfile
+    command: yarn run start:prod
+    ports:
+      - "4500:4500"
+    networks:
+      - shared-network
+    restart: unless-stopped
+
+networks:
+  shared-network:
+    driver: bridge
+
+volumes:
+  mongo:    
