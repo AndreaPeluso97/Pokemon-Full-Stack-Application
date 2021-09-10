@@ -19,6 +19,7 @@
     "@types/react-responsive": "^8.0.3",
     "@types/styled-components": "^5.1.14",
     "bootstrap": "^5.1.0",
+    "express": "^4.17.1",
     "formik": "^2.2.9",
     "graphql": "^15.5.3",
     "hoist-non-react-statics": "^3.3.2",
