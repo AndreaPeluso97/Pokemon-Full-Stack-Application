@@ -13,5 +13,7 @@ You can open a shell and run the following commands:
 - docker-compose up
 
 The front-end is exposed at the following DNS: http://localhost:4500/
+
 The back-end is exposed at the following DNS: http://localhost:9000/
+
 GraphQl dashboard is accessible at the following DNS: http://localhost:9000/graphql
